@@ -1,0 +1,17 @@
+# ZADA
+
+> ZADA is a digital trust network. "Log in with ZADA" lets a website or app sign users in with a
+> verified credential from the ZADA Wallet, over standard OpenID Connect (authorization code + PKCE).
+
+## Integrate
+
+- [Log in with ZADA — integration guide](https://portal.zada.solutions/zada-login.md): endpoints, the flow, hard rules, account linking, errors, testing. Everything needed in one file.
+- [OpenID discovery document](https://portal.zada.solutions/.well-known/openid-configuration): authoritative endpoint list.
+
+## Tools for coding agents
+
+- [ZADA Login skill for Claude Code](https://github.com/lycheeventures/zada-agent-kit): rules, reference implementation (Node/Express) and a smoke-test script.
+
+## Optional
+
+- [ZADA Portal](https://portal.zada.solutions): where organisations manage their client_id, callback URLs and client secret.

@@ -1,0 +1,12 @@
+{
+  "name": "zada",
+  "owner": { "name": "ZADA Solutions" },
+  "metadata": { "description": "Tools for integrating with the ZADA trust network." },
+  "plugins": [
+    {
+      "name": "zada-login",
+      "source": "./plugins/zada-login",
+      "description": "Add \"Log in with ZADA\" (OpenID Connect + ZADA Wallet) to a web or mobile back end, with a smoke test."
+    }
+  ]
+}
