@@ -1,0 +1,13 @@
+{
+  "name": "@zada/openclaw-zada",
+  "version": "0.1.0",
+  "description": "ZADA for OpenClaw: check each agent action with ZADA before it runs.",
+  "type": "module",
+  "private": true,
+  "scripts": { "test": "node --test test/*.test.ts" },
+  "peerDependencies": { "openclaw": ">=2026.11.6" },
+  "openclaw": {
+    "extensions": ["./index.ts"],
+    "compat": { "pluginApi": ">=2026.11.6", "minGatewayVersion": "2026.11.6" }
+  }
+}

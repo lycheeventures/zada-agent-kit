@@ -1,0 +1,43 @@
+{
+  "id": "zada",
+  "name": "ZADA",
+  "description": "Checks each agent action with ZADA before it runs and records what happened.",
+  "version": "0.1.0",
+  "activation": { "onStartup": true },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "endpoint": { "type": "string", "pattern": "^https://" },
+      "required": { "type": "boolean" },
+      "waitSeconds": { "type": "integer", "minimum": 0, "maximum": 540 },
+      "agents": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": { "keyFile": { "type": "string" }, "keyEnv": { "type": "string" } }
+        }
+      },
+      "skip": { "type": "array", "items": { "type": "string" } },
+      "read": { "type": "array", "items": { "type": "string" } },
+      "ask": { "type": "array", "items": { "type": "string" } },
+      "shell": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "default": { "enum": ["ask", "pass"] },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["match", "action"],
+              "properties": { "match": { "type": "string" }, "action": { "type": "string" } }
+            }
+          }
+        }
+      }
+    }
+  }
+}
