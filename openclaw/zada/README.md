@@ -29,7 +29,7 @@ A new call always gets its own request, so an agent can do the same thing again 
 whose approval is still open picks that approval up when it is tried again. Open approvals are kept in
 memory: after a gateway restart, a waiting call asks the person again.
 
-## Two limits you should know
+## Three things you should know
 
 1. **Turn on OpenClaw's sandbox for the agents you connect.** The plugin runs inside the gateway. An
    agent that can run shell commands on the host with network access can reach the same services
@@ -39,6 +39,14 @@ memory: after a gateway restart, a waiting call asks the person again.
    their tools, and no more.
 2. **Scheduled `command` jobs are not covered.** They are scripts the operator wrote, run by the
    gateway itself, not tool calls an agent chose. Scheduled agent turns are covered.
+
+3. **Take the plugin and gateway tools away from connected agents.** OpenClaw's standard tool profiles
+   give an agent a `plugins` tool (it can disable or uninstall this plugin) and a `gateway` tool (it
+   can restart or update OpenClaw). Deny both for every agent you connect:
+
+   ```json5
+   { agents: { entries: { scout: { tools: { deny: ["plugins", "gateway"] } } } } }
+   ```
 
 ## Install
 
