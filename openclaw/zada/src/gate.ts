@@ -80,6 +80,10 @@ export const MESSAGES = {
   refused: "ZADA refused this action. Nothing was done.",
 };
 
+// The longest refusal text passed on to the agent. ZADA's refusal for an action name the permission does not hold lists
+// the names it does hold (up to 40) and ends with what to do next; at 400 characters that ending was cut off.
+export const MAX_REFUSAL_CHARS = 2000;
+
 const block = (reason: string): BeforeResult => ({ block: true, blockReason: reason });
 const PENDING = new Set(["pending_approval", "pending"]);
 const REMEMBER_MS = 60 * 60 * 1000;
@@ -117,7 +121,7 @@ export function createGate(config: GateConfig, deps: GateDeps) {
   function refusal(answer: Record<string, unknown>, decision: string, intentId?: string): BeforeResult {
     if (PENDING.has(decision)) return block(`${MESSAGES.pending}${intentId ? ` Reference: ${intentId}` : ""}`);
     if (decision === "no_mandate") return block(MESSAGES.noPermission);
-    return block(typeof answer["message"] === "string" && answer["message"] ? answer["message"].slice(0, 400) : MESSAGES.refused);
+    return block(typeof answer["message"] === "string" && answer["message"] ? answer["message"].slice(0, MAX_REFUSAL_CHARS) : MESSAGES.refused);
   }
 
   async function before(event: ToolEvent, ctx: ToolContext): Promise<BeforeResult> {

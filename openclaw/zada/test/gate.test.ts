@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createGate, parseConfig, MESSAGES, DEFAULT_ENDPOINT, type GateDeps } from "../src/gate.ts";
+import { createGate, parseConfig, MESSAGES, MAX_REFUSAL_CHARS, DEFAULT_ENDPOINT, type GateDeps } from "../src/gate.ts";
 import { toolData } from "../src/zada-client.ts";
 
 type Call = { tool: string; args: Record<string, unknown>; key: string; endpoint: string };
@@ -79,6 +79,19 @@ test("refused: blocked with ZADA's message, and nothing is reported", async () =
   assert.deepEqual(await gate.before(send, ctx), { block: true, blockReason: "Not on weekends." });
   await gate.after({ ...send, result: {} }, ctx);
   assert.equal(calls.length, 1);
+});
+
+test("refused for the action name: the names ZADA lists and its closing instruction reach the agent whole", async () => {
+  const names = Array.from({ length: 20 }, (_, i) => `wordpress.publish.site_number_${i}`).join(", ");
+  const message = `The holder's permission has no line named "post.publish". The refusal is on the record. It names these actions: ${names}. If what you are about to do is truly one of them, ask again under that exact name and describe it honestly; a name ending in * stands for any one word there. Never pick a name just to get through. If it is none of them, do not do it: call zada_request_mandate to ask the holder for it, or tell the holder.`;
+  assert.ok(message.length > 400 && message.length < MAX_REFUSAL_CHARS);
+  const { gate } = setup({ answers: [{ decision: "refused", reason: "action_not_allowed", message }] });
+  assert.equal((await gate.before(send, ctx))?.blockReason, message);
+});
+
+test("refused with an overlong message: cut at the limit, never passed on whole", async () => {
+  const { gate } = setup({ answers: [{ decision: "refused", message: "x".repeat(MAX_REFUSAL_CHARS + 500) }] });
+  assert.equal((await gate.before(send, ctx))?.blockReason?.length, MAX_REFUSAL_CHARS);
 });
 
 test("no permission yet: blocked with a plain instruction", async () => {
