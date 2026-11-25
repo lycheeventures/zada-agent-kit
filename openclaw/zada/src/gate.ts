@@ -159,7 +159,8 @@ export function createGate(config: GateConfig, deps: GateDeps) {
 
       if (PENDING.has(decision)) {
         for (const [k, v] of waiting) if (now() - v.at > WAITING_MS || waiting.size >= REMEMBER_MAX) waiting.delete(k);
-        waiting.set(fingerprint, { id, at: waiting.get(fingerprint)?.at ?? now() });
+        const kept = waiting.get(fingerprint);
+        waiting.set(fingerprint, { id, at: kept && kept.id === id ? kept.at : now() });
       } else waiting.delete(fingerprint);
 
       if (decision === "allowed") {

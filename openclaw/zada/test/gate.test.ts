@@ -231,3 +231,21 @@ test("a refused call is not resumed: the next identical call is a new ask", asyn
   const ids = calls.map((c) => c.args.request_id);
   assert.deepEqual([ids[0] === ids[1], ids[1] === ids[2]], [true, false]);
 });
+
+test("a waiting entry older than a day is replaced by the new ask, which is then picked up", async () => {
+  const pending = { decision: "pending_approval", intent_id: "p" };
+  let clock = 0;
+  const calls: string[] = [];
+  const answers: Array<Record<string, unknown>> = [pending, pending, pending, { decision: "allowed", intent_id: "p2" }];
+  const gate = createGate(parseConfig({ waitSeconds: 0, agents: { scout: { keyEnv: "K" } } }), {
+    key: async () => "zna_test",
+    call: async (_e, _k, _tool, args) => { calls.push(args.request_id as string); return answers.shift()!; },
+    now: () => clock,
+  });
+  await gate.before(send, ctx);
+  clock = 24 * 60 * 60 * 1000;
+  await gate.before(send, ctx);
+  await gate.before(send, ctx);
+  assert.equal(await gate.before(send, ctx), undefined);
+  assert.deepEqual([calls[0] === calls[1], calls[1] === calls[2], calls[2] === calls[3]], [false, true, true]);
+});

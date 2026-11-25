@@ -6,7 +6,7 @@ The person or company the agent works for sets the permissions in ZADA Work or Z
 is what enforces them inside OpenClaw, for every tool the agent can reach: tools from any MCP server,
 messages, scheduled jobs it creates, and shell commands.
 
-> Status: tested offline (35 tests) and in a live OpenClaw 2026.11.6 gateway with a real ZADA key:
+> Status: tested offline (36 tests) and in a live OpenClaw 2026.11.6 gateway with a real ZADA key:
 > allowed, reported, waiting for approval, approved, declined, no permission, and ZADA unreachable.
 > Not yet tested together with the sandbox.
 
