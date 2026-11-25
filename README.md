@@ -30,6 +30,19 @@ bash plugins/zada-login/skills/zada-login/scripts/verify.sh <client_id> <registe
 You need a `client_id` from ZADA first. Organisations manage their callback URLs and client secret
 in the [ZADA Portal](https://portal.zada.solutions) under **OAuth Setup**.
 
+## ZADA for OpenClaw
+
+A plugin that makes every OpenClaw agent ask ZADA before it acts, and tell ZADA what happened after.
+The person or company the agent works for sets the permissions in ZADA Work or ZADA Home; the plugin
+enforces them for every tool the agent can reach, including tools from any MCP server and shell
+commands.
+
+- **Plugin and guide:** [openclaw/zada/](openclaw/zada/README.md)
+
+```bash
+openclaw plugins install --link ./openclaw/zada
+```
+
 ## Contact
 
 ZADA Solutions Pte. Ltd. — through your ZADA contact, or <https://zada.network>.
